@@ -37,3 +37,6 @@ mongodb/
 .log
 test.json
 note
+
+CLAUDE.md
+.claude
