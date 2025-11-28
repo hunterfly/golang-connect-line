@@ -1,0 +1,19 @@
+services:
+ app:
+  container_name: golang-connect-line
+  build:
+   context: .
+   dockerfile: ./build/Dockerfile.local
+  volumes:
+   - ./:/app/
+  working_dir: /app
+  env_file:
+   - .env
+  ports:
+   - "${APP_PORT}:${APP_PORT}"
+  networks:
+   - golang-template
+networks:
+ golang-template:
+  name: golang-template
+  driver: bridge

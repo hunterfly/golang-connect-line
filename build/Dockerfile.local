@@ -1,0 +1,8 @@
+FROM golang:1.24-alpine
+
+RUN apk update && apk upgrade && \
+    apk add git && \
+    apk add build-base && \
+    go install github.com/cosmtrek/air@v1.63.0
+
+ENTRYPOINT ["/go/bin/air"]
