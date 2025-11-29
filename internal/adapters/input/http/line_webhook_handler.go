@@ -53,6 +53,8 @@ func (h *LineWebhookHandler) HandleWebhook(c *fiber.Ctx) error {
 
 	// Parse and validate webhook request
 	cb, err := webhook.ParseRequest(h.channelSecret, httpReq)
+	// logrus.Printf("HTTP Request: %+v\n", httpReq)
+	// logrus.Printf("channelSecret: %v",h.channelSecret)
 	if err != nil {
 		logrus.Errorf("Failed to parse webhook request: %v", err)
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{

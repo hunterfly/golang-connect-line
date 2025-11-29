@@ -1,0 +1,15 @@
+APP_ENV=local
+APP_DEBUG=true
+APP_PORT=9089
+
+# local
+POSTGRES_HOST=database
+POSTGRES_PORT=5432
+POSTGRES_USERNAME=postgres
+POSTGRES_PASSWORD=g60v+aDYCs7M+atVL+cufg==
+POSTGRES_DATABASE=postgres
+POSTGRES_SSLMODE=false
+
+# LINE Messaging API
+LINE_CHANNEL_SECRET=your_channel_secret_here
+LINE_CHANNEL_TOKEN=your_channel_access_token_here

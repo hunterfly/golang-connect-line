@@ -12,8 +12,22 @@ services:
   ports:
    - "${APP_PORT}:${APP_PORT}"
   networks:
-   - golang-template
+   - golang-connect-line
+ database:
+  container_name: database-connect-line
+  image: postgres:14.1-alpine
+  shm_size: 1g
+  restart: always
+  environment:
+   - POSTGRES_USER=postgres
+   - POSTGRES_PASSWORD=AVNS_kweNERoe0akNrK_RPJ8
+  ports:
+   - "5432:5432"
+  volumes:
+   - "./db:/var/lib/postgresql/data"
+  networks:
+   - golang-connect-line
 networks:
- golang-template:
-  name: golang-template
+ golang-connect-line:
+  name: golang-connect-line
   driver: bridge
