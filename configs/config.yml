@@ -12,3 +12,11 @@ postgres:
 line:
   channel_secret: LINE_CHANNEL_SECRET
   channel_token: LINE_CHANNEL_TOKEN
+lmstudio:
+  base_url: LMSTUDIO_BASE_URL
+  model: LMSTUDIO_MODEL
+  timeout: LMSTUDIO_TIMEOUT
+  system_prompt: LMSTUDIO_SYSTEM_PROMPT
+session:
+  timeout: SESSION_TIMEOUT
+  max_turns: SESSION_MAX_TURNS

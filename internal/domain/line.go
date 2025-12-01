@@ -54,12 +54,12 @@ const (
 
 // LineWebhookEvent represents a LINE webhook event (domain entity)
 type LineWebhookEvent struct {
-	ID        string
-	Type      LineEventType
-	Timestamp time.Time
-	Source    LineSource
+	ID         string
+	Type       LineEventType
+	Timestamp  time.Time
+	Source     LineSource
 	ReplyToken string
-	Message   *LineMessage
+	Message    *LineMessage
 }
 
 // LineSource represents the source of the event
@@ -72,9 +72,9 @@ type LineSource struct {
 
 // LineMessage represents a message from LINE
 type LineMessage struct {
-	ID       string
-	Type     LineMessageType
-	Text     string
-	PackageID string  // For sticker
-	StickerID string  // For sticker
+	ID        string
+	Type      LineMessageType
+	Text      string
+	PackageID string // For sticker
+	StickerID string // For sticker
 }

@@ -41,7 +41,7 @@ func (h *LineWebhookHandler) HandleWebhook(c *fiber.Ctx) error {
 	if err != nil {
 		logrus.Errorf("Failed to create http request: %v", err)
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"status": "error",
+			"status":  "error",
 			"message": "Internal error",
 		})
 	}
@@ -58,7 +58,7 @@ func (h *LineWebhookHandler) HandleWebhook(c *fiber.Ctx) error {
 	if err != nil {
 		logrus.Errorf("Failed to parse webhook request: %v", err)
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"status": "error",
+			"status":  "error",
 			"message": "Invalid signature or request",
 		})
 	}
@@ -82,7 +82,7 @@ func (h *LineWebhookHandler) HandleWebhook(c *fiber.Ctx) error {
 	if err := h.service.HandleWebhook(webhookReq); err != nil {
 		logrus.Errorf("Failed to handle webhook: %v", err)
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"status": "error",
+			"status":  "error",
 			"message": "Failed to process webhook",
 		})
 	}

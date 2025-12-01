@@ -4,7 +4,21 @@
       "Bash(go mod tidy:*)",
       "Bash(go build:*)",
       "Bash(tree:*)",
-      "Bash(swag init:*)"
+      "Bash(swag init:*)",
+      "Bash(mkdir:*)",
+      "Bash(for file in mission.md roadmap.md tech-stack.md)",
+      "Bash(do)",
+      "Bash(if [ ! -f \"/Users/witchaiwatsakunthongaram/Documents/go/src/golang-connect-line/agent-os/product/$file\" ])",
+      "Bash(then)",
+      "Bash(echo:*)",
+      "Bash(else)",
+      "Bash(fi)",
+      "Bash(done)",
+      "Bash(go vet:*)",
+      "Bash(go test:*)",
+      "Bash(go fmt:*)",
+      "Bash(cat:*)",
+      "Bash(grep:*)"
     ],
     "deny": [],
     "ask": []

@@ -13,3 +13,11 @@ POSTGRES_SSLMODE=false
 # LINE Messaging API
 LINE_CHANNEL_SECRET=your_channel_secret_here
 LINE_CHANNEL_TOKEN=your_channel_access_token_here
+
+# LM Studio
+LMSTUDIO_BASE_URL=http://localhost:1234
+# For docker
+# LMSTUDIO_BASE_URL=http://host.docker.internal:1234
+LMSTUDIO_MODEL=llama-3.2-3b-instruct
+LMSTUDIO_TIMEOUT=60
+LMSTUDIO_SYSTEM_PROMPT=

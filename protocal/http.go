@@ -5,12 +5,15 @@ import (
 	"golang-template/configs"
 	httpAdapter "golang-template/internal/adapters/input/http"
 	lineAdapter "golang-template/internal/adapters/output/line"
+	lmstudioAdapter "golang-template/internal/adapters/output/lmstudio"
+	memoryAdapter "golang-template/internal/adapters/output/memory"
 	"golang-template/internal/adapters/output/postgres"
 	"golang-template/internal/application"
 	"golang-template/pkg/database_driver/gorm"
 	"log"
 	"os"
 	"os/signal"
+	"time"
 
 	swagger "github.com/arsmn/fiber-swagger/v2"
 	"github.com/gofiber/fiber/v2"
@@ -73,20 +76,52 @@ func ServeHTTP() error {
 	if err != nil {
 		logrus.Fatalf("Failed to create LINE client: %v", err)
 	}
+
+	// Output adapter (LM Studio client)
+	lmStudioClient, err := lmstudioAdapter.NewLMStudioClientAdapter(configs.GetViper().LMStudio)
+	if err != nil {
+		logrus.Fatalf("Failed to create LM Studio client: %v", err)
+	}
+
+	// Read session config with defaults
+	// Default values: timeout=30 minutes, maxTurns=10
+	sessionConfig := configs.GetViper().Session
+	sessionTimeout := 30 * time.Minute // default timeout
+	sessionMaxTurns := 10              // default max turns
+
+	if sessionConfig.Timeout > 0 {
+		sessionTimeout = time.Duration(sessionConfig.Timeout) * time.Minute
+	}
+	if sessionConfig.MaxTurns > 0 {
+		sessionMaxTurns = sessionConfig.MaxTurns
+	}
+
+	logrus.Infof("Session config: timeout=%v, maxTurns=%d", sessionTimeout, sessionMaxTurns)
+
+	// Output adapter (Memory session store for conversation context)
+	sessionStore := memoryAdapter.NewMemorySessionStore(sessionTimeout, sessionMaxTurns)
+
+	// Get system prompt from config with default fallback
+	systemPrompt := configs.GetViper().LMStudio.SystemPrompt
+	if systemPrompt == "" {
+		systemPrompt = configs.DefaultSystemPrompt
+	}
+	logrus.Infof("Using system prompt: %s", systemPrompt)
+
 	// Application service (LINE webhook use case)
-	lineWebhookSrv := application.NewLineWebhookService(lineClient, postgresRepo)
+	lineWebhookSrv := application.NewLineWebhookService(lineClient, lmStudioClient, sessionStore, systemPrompt, sessionTimeout, sessionMaxTurns)
 	// Input adapter (LINE webhook handler)
 	lineWebhookHdl := httpAdapter.NewLineWebhookHandler(lineWebhookSrv, configs.GetViper().Line.ChannelSecret)
 	app.Get("/swagger/*", swagger.HandlerDefault) // default
 	app.Get("/health", hdl.HealthCheck)
 
-	magnolia := app.Group("/v1/api")
+	routeApp := app.Group("/v1/api")
 	{
-		magnolia.Post("/todo", hdl.CreateTodo)
-		magnolia.Put("/todo", hdl.UpdateTodo)
-		magnolia.Delete("/todo/:id", hdl.DeleteTodo)
-		magnolia.Get("/todo/:id", hdl.GetTodo)
-		magnolia.Get("/todo", hdl.GetTodo)
+		routeApp.Post("/todo", hdl.CreateTodo)
+		routeApp.Put("/todo", hdl.UpdateTodo)
+		routeApp.Delete("/todo/:id", hdl.DeleteTodo)
+		routeApp.Get("/todo/:id", hdl.GetTodo)
+		routeApp.Get("/todo", hdl.GetTodo)
 	}
 
 	// LINE webhook endpoint

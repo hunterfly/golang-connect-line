@@ -8,11 +8,16 @@ import (
 	"github.com/spf13/viper"
 )
 
+// DefaultSystemPrompt is the default system prompt for LM Studio
+const DefaultSystemPrompt = "You are a helpful assistant responding via LINE messaging"
+
 // Config struct
 type Config struct {
 	App      `mapstructure:"app"`
 	Postgres `mapstructure:"postgres"`
 	Line     `mapstructure:"line"`
+	LMStudio `mapstructure:"lmstudio"`
+	Session  `mapstructure:"session"`
 }
 
 // App struct
@@ -36,6 +41,20 @@ type Postgres struct {
 type Line struct {
 	ChannelSecret string `mapstructure:"channel_secret"`
 	ChannelToken  string `mapstructure:"channel_token"`
+}
+
+// LMStudio struct - Configuration for LM Studio client
+type LMStudio struct {
+	BaseURL      string `mapstructure:"base_url"`
+	Model        string `mapstructure:"model"`
+	Timeout      int    `mapstructure:"timeout"`
+	SystemPrompt string `mapstructure:"system_prompt"`
+}
+
+// Session struct - Configuration for user session management
+type Session struct {
+	Timeout  int `mapstructure:"timeout"`
+	MaxTurns int `mapstructure:"max_turns"`
 }
 
 var config Config

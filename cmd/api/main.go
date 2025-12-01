@@ -16,8 +16,8 @@ package main
 // @BasePath /
 // @schemes http
 import (
-	protocol "golang-template/protocal"
 	_ "golang-template/docs"
+	protocol "golang-template/protocal"
 
 	_ "github.com/arsmn/fiber-swagger/v2"
 	"github.com/sirupsen/logrus"
